@@ -5,19 +5,22 @@ let app;
 
 try {
   app = createApp();
+  console.log('✅ Express app created successfully with database connection');
 } catch (error) {
-  console.error('Failed to create Express app:', error);
+  console.error('❌ Failed to create Express app with database:', error);
   // Fallback for cases where database or other dependencies are not available
   const express = (await import('express')).default;
   app = express();
 
   app.use(express.json());
 
+  console.log('⚠️ Using fallback mock API - connect Supabase for real functionality');
+
   // Health check
   app.get('/health', (req, res) => {
     res.json({
       ok: true,
-      message: 'Server running without database connection',
+      message: 'Server running without database connection - using mock API',
       timestamp: new Date().toISOString()
     });
   });
@@ -25,6 +28,8 @@ try {
   // API routes with mock responses
   app.use('/api', (req, res) => {
     const path = req.path;
+    console.log(`📡 Mock API request: ${req.method} ${path}`);
+
     if (path.includes('/types') || path.includes('/type')) {
       return res.json({
         success: true,
