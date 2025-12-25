@@ -1,0 +1,13 @@
+body {
+  height: 100vh;
+
+  #root {
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+
+  .no-wrap {
+    white-space: nowrap;
+  }
+}

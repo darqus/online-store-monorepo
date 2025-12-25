@@ -1,0 +1,44 @@
+{
+  "name": "online-store-monorepo",
+  "version": "1.0.0",
+  "description": "Full-stack e-commerce application with React frontend and Node.js backend",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
+    "dev:client": "npm run dev --workspace=client",
+    "dev:server": "npm run dev --workspace=server",
+    "build": "npm run build --workspace=client",
+    "start": "npm run start --workspace=server",
+    "test": "npm run test --workspace=server",
+    "lint": "npm run lint --workspace=server",
+    "format": "npm run format --workspace=client && npm run format --workspace=server",
+    "install:all": "npm install",
+    "clean": "rm -rf client/node_modules server/node_modules node_modules",
+    "db:migrate": "npm run db:migrate --workspace=server",
+    "db:migrate:down": "npm run db:migrate:down --workspace=server",
+    "db:seed": "npm run db:seed --workspace=server",
+    "db:seed:down": "npm run db:seed:down --workspace=server"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "ecommerce",
+    "react",
+    "nodejs",
+    "postgresql",
+    "express",
+    "monorepo"
+  ],
+  "author": "darqus",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}

@@ -1,0 +1,9 @@
+# Dependencies
+/node_modules
+
+# Static files
+static
+coverage
+
+# Environment variables
+.env
