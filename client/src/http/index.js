@@ -3,32 +3,20 @@ import { LOCAL_STORAGE_KEYS } from '../utils/consts'
 import { handleError } from '../utils/notifications'
 import { PersistentStorage } from '../utils/persistentStorage'
 
-// Получаем переменные окружения
-const { VITE_API_URL } = import.meta.env
 
 // Определяем базовый URL API с учетом среды развертывания
-let baseURL
+const api = `${window.location.origin}/api`
 
-if (VITE_API_URL) {
-  // Явно заданный API URL (для локальной разработки или кастомной конфигурации)
-  baseURL = VITE_API_URL
-} else if (typeof window !== 'undefined') {
-  // Production на Vercel или другие среды: используем текущий origin
-  baseURL = window.location.origin
-} else {
-  // Fallback для SSR или других случаев
-  baseURL = ''
-}
 
 // Создаем экземпляр axios с базовым URL
 const $host = axios.create({
-  baseURL,
+  baseURL: api,
   withCredentials: true,
 })
 
 // Создаем экземпляр axios с базовым URL для аутентифицированных запросов
 const $authHost = axios.create({
-  baseURL,
+  baseURL: api,
   withCredentials: true,
 })
 
