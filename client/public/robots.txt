@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://online-store-monorepo-client.vercel.app/sitemap.xml

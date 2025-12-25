@@ -19,7 +19,7 @@
       "dest": "/vercel/api/[...slug]?slug=$1"
     },
     {
-      "src": "/((?:[^/]+\\.)*(?:ico|png|jpg|jpeg|gif|svg|css|js|woff|woff2|ttf|eot|txt|xml|json|map|pdf|zip|rar|7z|tar|gz|bz2|xz))$",
+      "src": "/(favicon\\.ico|vite\\.svg|.*\\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))$",
       "dest": "/client/$1"
     },
     {

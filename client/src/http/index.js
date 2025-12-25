@@ -4,7 +4,7 @@ import { handleError } from '../utils/notifications'
 import { PersistentStorage } from '../utils/persistentStorage'
 
 // Получаем переменные окружения
-const { VITE_API_URL, VERCEL_URL, VERCEL_ENV } = import.meta.env
+const { VITE_API_URL } = import.meta.env
 
 // Определяем базовый URL API с учетом среды развертывания
 let baseURL
@@ -12,11 +12,8 @@ let baseURL
 if (VITE_API_URL) {
   // Явно заданный API URL (для локальной разработки или кастомной конфигурации)
   baseURL = VITE_API_URL
-} else if (VERCEL_URL && VERCEL_ENV) {
-  // Production на Vercel: используем системную переменную VERCEL_URL
-  baseURL = `https://${VERCEL_URL}`
 } else if (typeof window !== 'undefined') {
-  // Fallback для локальной разработки или других сред
+  // Production на Vercel или другие среды: используем текущий origin
   baseURL = window.location.origin
 } else {
   // Fallback для SSR или других случаев
