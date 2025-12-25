@@ -23,17 +23,6 @@
       "dest": "/client/index.html"
     }
   ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        }
-      ]
-    }
-  ],
   "env": {
     "NODE_ENV": "production"
   }

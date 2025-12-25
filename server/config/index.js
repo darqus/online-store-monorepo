@@ -4,7 +4,7 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().positive().default(10000),
   SECRET_KEY: z.string().min(10, 'SECRET_KEY must be at least 10 chars'),
-  DATABASE_URL: z.string().url().optional(),
+  DATABASE_URL: z.string().url().optional().or(z.literal('')).optional(),
   DB_DIALECT: z.string().default('postgres'),
   DB_HOST: z.string().default('127.0.0.1'),
   DB_PORT: z.coerce.number().int().positive().default(5432),
