@@ -6,9 +6,12 @@ import { PersistentStorage } from '../utils/persistentStorage'
 // Определяем базовый URL API
 const { VITE_API_URL: API_BASE_URL } = import.meta.env
 
+// Fallback для Vercel: если VITE_API_URL не установлена, используем текущий домен
+const baseURL = API_BASE_URL || (typeof window !== 'undefined' ? window.location.origin : '')
+
 // Создаем экземпляр axios с базовым URL
 const $host = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL,
   withCredentials: true,
 })
 
