@@ -65,6 +65,13 @@ if grep -r "DATABASE_URL.*=" --exclude-dir=node_modules --exclude-dir=.git . | g
     echo "   This is OK for local development, but use environment variables in production"
 fi
 
+# Check for problematic environment variables in client/.env
+if [ -f "client/.env" ] && grep -q "\\\$" client/.env; then
+    echo "⚠️  Found environment variable interpolation issues in client/.env!"
+    echo "   Variables with \$ signs won't be interpolated correctly."
+    echo "   Use actual values or remove the file (Vercel uses system variables automatically)"
+fi
+
 echo "✅ Ready for FREE deployment!"
 echo ""
 

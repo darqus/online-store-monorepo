@@ -42,14 +42,16 @@
    # 2. Connect GitHub repository
    # 3. Выберите проект - Vercel автоматически обнаружит vercel.json
    # 4. Environment Variables настраиваются автоматически через системные переменные Vercel
-   #    (VITE_API_URL не требуется - используется VERCEL_URL автоматически)
+   #    (переменные окружения клиента не требуются - используются VERCEL_URL и VERCEL_ENV)
    # 5. Deploy автоматически!
    ```
 
-   **Как работает API routing:**
-   - `/api/*` запросы перенаправляются на serverless функции в `vercel/api/[...slug].js`
-   - Express приложение из `server/app.js` используется для обработки всех API запросов
-   - Клиент автоматически определяет API URL через `VERCEL_URL` (системная переменная Vercel)
+   **Переменные окружения и API routing:**
+   - **Локальная разработка**: Используйте `client/.env` с `VITE_API_URL=http://localhost:5000/api`
+   - **Vercel Production**: Системные переменные `VERCEL_URL` и `VERCEL_ENV` используются автоматически
+   - **API routing**: `/api/*` запросы перенаправляются на serverless функции в `vercel/api/[...slug].js`
+   - **Express app**: Полное Express приложение из `server/app.js` обрабатывает все API запросы
+   - **Автоопределение**: Клиент автоматически определяет API URL через системные переменные Vercel
 
 4. **Проверьте развертывание:**
    - Frontend: `https://online-store-monorepo-client.vercel.app`
