@@ -40,18 +40,18 @@
    ```bash
    # 1. Регистрация: https://vercel.com
    # 2. Connect GitHub repository
-   # 3. Выберите проект
-   # 4. Настройте Environment Variables:
-   DATABASE_URL=postgresql://[your-supabase-connection]
-   SECRET_KEY=your-super-secret-key-minimum-32-chars
-   NODE_ENV=production
+   # 3. Выберите проект - Vercel автоматически обнаружит vercel.json
+   # 4. Настройте Environment Variables в Vercel Dashboard:
+   #    VITE_API_URL=https://your-project.vercel.app
+   #    (оставьте пустым для автоматического определения)
    # 5. Deploy автоматически!
    ```
 
 4. **Проверьте развертывание:**
    - Frontend: `https://your-project.vercel.app`
    - API Health: `https://your-project.vercel.app/api/health`
-   - API Types: `https://your-project.vercel.app/api/types`
+   - Магазин: `https://your-project.vercel.app/shop`
+   - **Примечание:** Пока подключена mock API. Для полной функциональности подключите Supabase.
 
 ### 🏠 Локальная разработка
 
