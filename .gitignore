@@ -78,6 +78,7 @@ dist
 public
 
 !client/public/favicon.ico
+!client/public/robots.txt
 # Storybook build outputs
 .out
 .storybook-out
