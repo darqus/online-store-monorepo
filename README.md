@@ -42,15 +42,15 @@
    # 2. Connect GitHub repository
    # 3. Выберите проект - Vercel автоматически обнаружит vercel.json
    # 4. Настройте Environment Variables в Vercel Dashboard:
-   #    VITE_API_URL=https://your-project.vercel.app
+   #    VITE_API_URL=https://online-store-monorepo-client.vercel.app
    #    (оставьте пустым для автоматического определения)
    # 5. Deploy автоматически!
    ```
 
 4. **Проверьте развертывание:**
-   - Frontend: `https://your-project.vercel.app`
-   - API Health: `https://your-project.vercel.app/api/health`
-   - Магазин: `https://your-project.vercel.app/shop`
+   - Frontend: `https://online-store-monorepo-client.vercel.app`
+   - API Health: `https://online-store-monorepo-client.vercel.app/api/health`
+   - Магазин: `https://online-store-monorepo-client.vercel.app/shop`
    - **Примечание:** Пока подключена mock API. Для полной функциональности подключите Supabase.
 
 ### 🏠 Локальная разработка
@@ -207,9 +207,9 @@ NODE_ENV=production
 ### Мониторинг развертывания
 
 После развертывания:
-- **API Health**: `https://your-project.vercel.app/api/health`
-- **Types API**: `https://your-project.vercel.app/api/types`
-- **Клиент**: `https://your-project.vercel.app`
+- **API Health**: `https://online-store-monorepo-client.vercel.app/api/health`
+- **Types API**: `https://online-store-monorepo-client.vercel.app/api/types`
+- **Клиент**: `https://online-store-monorepo-client.vercel.app`
 
 ## 💰 Стоимость - ПОЛНОСТЬЮ БЕСПЛАТНО!
 
@@ -235,8 +235,8 @@ NODE_ENV=production
 - **Types API**: http://localhost:10000/api/types
 
 ### Production (Vercel)
-- **Health Check**: `https://your-project.vercel.app/api/health`
-- **Types API**: `https://your-project.vercel.app/api/types`
+- **Health Check**: `https://online-store-monorepo-client.vercel.app/api/health`
+- **Types API**: `https://online-store-monorepo-client.vercel.app/api/types`
 
 ### Структура API
 - `GET /api/health` - Проверка работоспособности
@@ -425,7 +425,7 @@ npm run test:e2e
 **API не отвечает:**
 ```bash
 # Проверьте health endpoint
-curl https://your-project.vercel.app/api/health
+curl https://online-store-monorepo-client.vercel.app/api/health
 ```
 
 **База данных недоступна:**
