@@ -4,10 +4,12 @@ import { handleError } from '../utils/notifications'
 import { PersistentStorage } from '../utils/persistentStorage'
 
 // Определяем базовый URL API
-const { VITE_API_URL: API_BASE_URL } = import.meta.env
+const { VITE_API_URL: API_BASE_URL, VERCEL_URL } = import.meta.env
 
-// Fallback для Vercel: если VITE_API_URL не установлена, используем текущий домен
-const baseURL = API_BASE_URL || (typeof window !== 'undefined' ? window.location.origin : '')
+// Определяем базовый URL: приоритет VITE_API_URL, затем VERCEL_URL, затем текущий origin
+const baseURL = API_BASE_URL ||
+  (VERCEL_URL ? `https://${VERCEL_URL}` : '') ||
+  (typeof window !== 'undefined' ? window.location.origin : '')
 
 // Создаем экземпляр axios с базовым URL
 const $host = axios.create({
@@ -17,7 +19,7 @@ const $host = axios.create({
 
 // Создаем экземпляр axios с базовым URL для аутентифицированных запросов
 const $authHost = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL,
   withCredentials: true,
 })
 
