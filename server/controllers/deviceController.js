@@ -16,6 +16,7 @@ import {
   toViewDevice,
   toViewDevices,
 } from '../services/deviceService.js'
+import { cachedGet, cacheInvalidate } from '../utils/cache.js'
 
 class DeviceController {
   async create(req, res, next) {
@@ -62,6 +63,10 @@ class DeviceController {
         info: infoArr,
       })
       const view = await toViewDevice(device)
+
+      // Инвалидируем кэш устройств
+      cacheInvalidate('devices:')
+
       return created(res, view)
     } catch (error) {
       // cleanup uploaded image on failure
@@ -91,12 +96,18 @@ class DeviceController {
       where.typeId = typeId
     }
 
-    const devices = await Device.findAndCountAll({
-      where,
-      limit: Number(limit),
-      offset: Number(offset),
-      include: [{ model: Brand }],
+    // Создаём ключ кэша на основе параметров
+    const cacheKey = `devices:${typeId || 'all'}:${brandId || 'all'}:${page}:${limit}`
+
+    const devices = await cachedGet(cacheKey, async () => {
+      return await Device.findAndCountAll({
+        where,
+        limit: Number(limit),
+        offset: Number(offset),
+        include: [{ model: Brand }],
+      })
     })
+
     const view = await toViewDevices(devices)
     return ok(res, view)
   }
@@ -155,6 +166,10 @@ class DeviceController {
         await storage.remove(device.img)
       }
       await device.destroy()
+
+      // Инвалидируем кэш устройств
+      cacheInvalidate('devices:')
+
       return ok(res, { message: DEVICE_DELETED_SUCCESSFULLY })
     } catch (error) {
       next(ApiError.internal(error.message))

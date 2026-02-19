@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
@@ -9,29 +9,17 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { AddToBasketButton } from '../components/AddToBasketButton'
 import { Rating } from '../components/Rating'
 import { Context } from '../contexts/GlobalContext'
-import { fetchOneDevice } from '../http/deviceAPI'
+import { useDevice } from '../hooks/useDevices'
 import { showError } from '../utils/notifications'
 import { formatPrice } from '../utils/priceFormatter'
 
 export const Device = observer(() => {
-  const [device, setDevice] = useState({ info: [] })
-  const [loading, setLoading] = useState(true)
-
   const { id } = useParams()
   const navigate = useNavigate()
   const { basket, user } = useContext(Context)
 
-  // Загрузка данных устройства при изменении id
-  useEffect(() => {
-    setLoading(true)
-    fetchOneDevice(id)
-      .then((data) => {
-        setDevice(data)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }, [id])
+  // Используем SWR для загрузки устройства
+  const { device: swrDevice, isLoading } = useDevice(id)
 
   // Загружаем корзину, если пользователь авторизован
   useEffect(() => {
@@ -42,7 +30,9 @@ export const Device = observer(() => {
     }
   }, [user.isAuth, basket?.isLoaded, basket?.isLoading, basket?.loadBasket])
 
-  if (loading) return <div>Loading...</div>
+  if (isLoading) return <div>Loading...</div>
+
+  const device = swrDevice || { info: [], name: '', price: 0, rating: 0, imageUrl: '' }
 
   return (
     <Container className="mt-5">

@@ -17,12 +17,9 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
  * @returns {Object|null} Декодированный токен или null при неудаче.
  */
 const handleAuthResponse = (responseData) => {
-  const {
-    data: { token },
-    success,
-  } = responseData
+  const { token } = responseData
 
-  if (!success) {
+  if (!token) {
     return null
   }
 

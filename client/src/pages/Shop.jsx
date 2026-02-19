@@ -8,29 +8,28 @@ import { DeviceList } from '../components/DeviceList'
 import { PagePagination } from '../components/PagePagination'
 import { TypeBar } from '../components/TypeBar'
 import { Context } from '../contexts/GlobalContext'
-import { fetchBrands, fetchTypes } from '../http/deviceAPI'
+import { useBrands, useTypes } from '../hooks/useDevices'
 import { showError } from '../utils/notifications'
 
 export const Shop = observer(() => {
   const { device, basket, user } = useContext(Context)
 
-  // Загрузка типов и брендов при монтировании
-  useEffect(() => {
-    const loadInitialData = async () => {
-      try {
-        const [typesData, brandsData] = await Promise.all([
-          fetchTypes(),
-          fetchBrands(),
-        ])
-        device.setTypes(typesData)
-        device.setBrands(brandsData)
-      } catch (error) {
-        showError('Ошибка при загрузке данных магазина', error)
-      }
-    }
+  // Используем SWR для загрузки типов и брендов
+  const { types, isLoading: typesLoading } = useTypes()
+  const { brands, isLoading: brandsLoading } = useBrands()
 
-    loadInitialData()
-  }, [device.setTypes, device.setBrands])
+  // Синхронизируем данные из SWR с MobX store
+  useEffect(() => {
+    if (!typesLoading && types.length > 0) {
+      device.setTypes(types)
+    }
+  }, [types, typesLoading, device.setTypes])
+
+  useEffect(() => {
+    if (!brandsLoading && brands.length > 0) {
+      device.setBrands(brands)
+    }
+  }, [brands, brandsLoading, device.setBrands])
 
   // Загружаем корзину, если пользователь авторизован
   useEffect(() => {

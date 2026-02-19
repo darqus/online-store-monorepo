@@ -1,6 +1,7 @@
 import ApiError from '../error/ApiError.js'
 import { ok, created } from '../utils/respond.js'
 import { createBrand, listBrands, getBrandById } from '../services/brandService.js'
+import { cachedGet, cacheInvalidate } from '../utils/cache.js'
 
 class BrandController {
   async create(req, res, next) {
@@ -10,6 +11,10 @@ class BrandController {
         return next(ApiError.badRequest('Name is required'))
       }
       const brand = await createBrand({ name, country })
+
+      // Инвалидируем кэш брендов
+      cacheInvalidate('brands:')
+
       return created(res, brand)
     } catch (e) {
       next(ApiError.badRequest(e.message))
@@ -17,7 +22,9 @@ class BrandController {
   }
 
   async getAll(req, res) {
-    const brands = await listBrands()
+    const brands = await cachedGet('brands:all', async () => {
+      return await listBrands()
+    })
     return ok(res, brands)
   }
 
