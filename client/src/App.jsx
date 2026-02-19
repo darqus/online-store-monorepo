@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { Suspense, useContext, useEffect, useRef, useState } from 'react'
 import Spinner from 'react-bootstrap/Spinner'
 import { BrowserRouter } from 'react-router-dom'
 import './App.css'
@@ -41,7 +41,15 @@ export const App = observer(() => {
   return (
     <BrowserRouter>
       <NavBar />
-      <AppRouter />
+      <Suspense
+        fallback={
+          <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+            <Spinner variant="primary" animation="border" />
+          </div>
+        }
+      >
+        <AppRouter />
+      </Suspense>
     </BrowserRouter>
   )
 })

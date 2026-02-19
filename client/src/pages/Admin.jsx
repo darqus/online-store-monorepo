@@ -1,10 +1,19 @@
-import { useState } from 'react'
+import { Suspense, lazy, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
-import { CreateBrandModal } from '../components/modals/CreateBrandModal'
-import { CreateDeviceModal } from '../components/modals/CreateDeviceModal'
-import { CreateTypeModal } from '../components/modals/CreateTypeModal'
+import Spinner from 'react-bootstrap/Spinner'
 import { getAdminMenu } from '../utils/consts'
+
+// Ленивая загрузка модальных окон
+const CreateTypeModal = lazy(() => import('../components/modals/CreateTypeModal'))
+const CreateBrandModal = lazy(() => import('../components/modals/CreateBrandModal'))
+const CreateDeviceModal = lazy(() => import('../components/modals/CreateDeviceModal'))
+
+const ModalFallback = () => (
+  <div className="d-flex justify-content-center align-items-center" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.3)', zIndex: 1050 }}>
+    <Spinner variant="primary" animation="border" />
+  </div>
+)
 
 export const Admin = () => {
   const [brandVisible, setBrandVisible] = useState(false)
@@ -31,18 +40,26 @@ export const Admin = () => {
           </div>
         ))}
       </div>
-      <CreateTypeModal
-        show={typeVisible}
-        handleClose={() => setTypeVisible(false)}
-      />
-      <CreateBrandModal
-        show={brandVisible}
-        handleClose={() => setBrandVisible(false)}
-      />
-      <CreateDeviceModal
-        show={deviceVisible}
-        handleClose={() => setDeviceVisible(false)}
-      />
+      <Suspense fallback={<ModalFallback />}>
+        {typeVisible && (
+          <CreateTypeModal
+            show={typeVisible}
+            handleClose={() => setTypeVisible(false)}
+          />
+        )}
+        {brandVisible && (
+          <CreateBrandModal
+            show={brandVisible}
+            handleClose={() => setBrandVisible(false)}
+          />
+        )}
+        {deviceVisible && (
+          <CreateDeviceModal
+            show={deviceVisible}
+            handleClose={() => setDeviceVisible(false)}
+          />
+        )}
+      </Suspense>
     </Container>
   )
 }
