@@ -1,4 +1,5 @@
-import { Card, Col } from 'react-bootstrap'
+import Card from 'react-bootstrap/Card'
+import Col from 'react-bootstrap/Col'
 import { useNavigate } from 'react-router-dom'
 import { PUBLIC_ROUTES } from '../utils/consts'
 import { formatPrice } from '../utils/priceFormatter'

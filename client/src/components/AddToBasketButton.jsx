@@ -1,6 +1,8 @@
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
-import { Button, ButtonGroup, FormControl } from 'react-bootstrap'
+import Button from 'react-bootstrap/Button'
+import ButtonGroup from 'react-bootstrap/ButtonGroup'
+import FormControl from 'react-bootstrap/FormControl'
 import { useGlobalContext } from '../contexts/GlobalContext'
 import { showError } from '../utils/notifications'
 

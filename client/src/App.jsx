@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import { useContext, useEffect, useRef, useState } from 'react'
-import { Spinner } from 'react-bootstrap'
+import Spinner from 'react-bootstrap/Spinner'
 import { BrowserRouter } from 'react-router-dom'
 import './App.css'
 import { NavBar } from './components/NavBar'

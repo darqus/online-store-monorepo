@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Button, Container } from 'react-bootstrap'
+import Button from 'react-bootstrap/Button'
+import Container from 'react-bootstrap/Container'
 import { CreateBrandModal } from '../components/modals/CreateBrandModal'
 import { CreateDeviceModal } from '../components/modals/CreateDeviceModal'
 import { CreateTypeModal } from '../components/modals/CreateTypeModal'

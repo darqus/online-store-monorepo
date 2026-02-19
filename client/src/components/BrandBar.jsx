@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import { useContext } from 'react'
-import { Card } from 'react-bootstrap'
+import Card from 'react-bootstrap/Card'
 import { Context } from '../contexts/GlobalContext'
 
 export const BrandBar = observer(() => {

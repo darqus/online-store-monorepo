@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import { useContext, useMemo } from 'react'
-import { Pagination } from 'react-bootstrap'
+import Pagination from 'react-bootstrap/Pagination'
 import { Context } from '../contexts/GlobalContext'
 
 export const PagePagination = observer(() => {

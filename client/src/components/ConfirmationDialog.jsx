@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react-lite'
-import { Button, Modal } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
+import Modal from 'react-bootstrap/Modal'
 
 /**
  * Компонент диалога подтверждения для замены window.confirm
