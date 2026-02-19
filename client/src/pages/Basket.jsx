@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   Alert,
   Button,
@@ -61,10 +61,12 @@ const BasketItem = observer(
     }, [item.quantity, handleQuantityChange])
 
     // Оптимизированные вычисления для предотвращения лишних перерендеров
-    const itemTotal =
-      (Number(item.device?.price) || 0) * (Number(item.quantity) || 0)
+    const itemTotal = useMemo(
+      () => (Number(item.device?.price) || 0) * (Number(item.quantity) || 0),
+      [item.device?.price, item.quantity]
+    )
 
-    const imageUrl = (() => {
+    const imageUrl = useMemo(() => {
       const imgPath = item.device?.img
       if (!imgPath) {
         return ''
@@ -76,7 +78,7 @@ const BasketItem = observer(
 
       // Сравниваем с реализацией в DeviceItem.jsx - там используется /static/images/
       return `/static/images/${imgPath}`
-    })()
+    }, [item.device?.img])
 
     return (
       <Card className={`mb-3 ${styles.basketItem}`}>
