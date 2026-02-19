@@ -14,6 +14,16 @@ import { validationResult } from 'express-validator'
 const generateJwt = (id, email, role) =>
   jwt.sign({ id, email, role }, process.env.SECRET_KEY, { expiresIn: '24h' })
 
+// Установка httpOnly cookie с токеном
+const setAuthCookie = (res, token) => {
+  res.cookie('token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 24 * 60 * 60 * 1000, // 24 часа
+  })
+}
+
 class UserController {
   async registration(req, res, next) {
     const errors = validationResult(req)
@@ -31,6 +41,10 @@ class UserController {
     const user = await User.create({ email, role, password: hashPassword })
     await Basket.create({ userId: user.id })
     const token = generateJwt(user.id, user.email, user.role)
+
+    // Устанавливаем httpOnly cookie
+    setAuthCookie(res, token)
+
     return created(res, { token })
   }
 
@@ -50,6 +64,10 @@ class UserController {
       return next(ApiError.badRequest(INVALID_PASSWORD))
     }
     const token = generateJwt(user.id, user.email, user.role)
+
+    // Устанавливаем httpOnly cookie
+    setAuthCookie(res, token)
+
     return ok(res, { token })
   }
 
@@ -57,6 +75,10 @@ class UserController {
     // Предполагается, что middleware для проверки JWT уже отработал
     // и добавил информацию о пользователе в req.user
     const token = generateJwt(req.user.id, req.user.email, req.user.role)
+
+    // Обновляем cookie при каждом запросе auth
+    setAuthCookie(res, token)
+
     return ok(res, { token })
   }
 }

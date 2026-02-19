@@ -1,6 +1,5 @@
 import { jwtDecode } from 'jwt-decode'
-import { API_ENDPOINTS, LOCAL_STORAGE_KEYS } from '../utils/consts'
-import { PersistentStorage } from '../utils/persistentStorage'
+import { API_ENDPOINTS } from '../utils/consts'
 import { $authHost, $host } from './index'
 import { handleError } from '../utils/notifications'
 
@@ -12,7 +11,8 @@ import { handleError } from '../utils/notifications'
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 /**
- * Обрабатывает ответ аутентификации: проверяет успех, сохраняет токен и возвращает декодированный токен.
+ * Обрабатывает ответ аутентификации: проверяет успех и возвращает декодированный токен.
+ * Токен автоматически сохраняется в httpOnly cookie на сервере.
  * @param {Object} responseData - Данные ответа от сервера.
  * @returns {Object|null} Декодированный токен или null при неудаче.
  */
@@ -26,10 +26,8 @@ const handleAuthResponse = (responseData) => {
     return null
   }
 
-  // Сохраняем токен в localStorage
-  PersistentStorage.set(LOCAL_STORAGE_KEYS.AUTH_TOKEN, token)
-
-  // Возвращаем декодированный токен, содержащий информацию о пользователе
+  // Токен уже сохранён в httpOnly cookie на сервере
+  // Возвращаем декодированный токен для информации о пользователе
   return jwtDecode(token)
 }
 
@@ -63,7 +61,6 @@ export const registration = async (email, password) => {
       }
 
       if (status === 401 || status === 403) {
-        PersistentStorage.remove(LOCAL_STORAGE_KEYS.AUTH_TOKEN)
         return null
       }
 
@@ -102,7 +99,6 @@ export const login = async (email, password) => {
       }
 
       if (status === 401 || status === 403) {
-        PersistentStorage.remove(LOCAL_STORAGE_KEYS.AUTH_TOKEN)
         return null
       }
 
@@ -114,18 +110,17 @@ export const login = async (email, password) => {
 
 /**
  * Проверяет токен аутентификации.
+ * Токен автоматически отправляется в httpOnly cookie.
  * @returns {Promise<Object|null>} Декодированный токен или null при ошибке.
  */
 export const check = async () => {
-  const token = PersistentStorage.get(LOCAL_STORAGE_KEYS.AUTH_TOKEN)
-  if (!token) return Promise.resolve(null)
-
   let attempt = 0
   const maxAttempts = 3
 
   while (attempt < maxAttempts) {
     try {
       // Используем специальный эндпоинт для проверки токена
+      // Токен автоматически отправляется в cookie
       const response = await $authHost.get(API_ENDPOINTS.USER.AUTH)
 
       return handleAuthResponse(response.data)
@@ -140,7 +135,7 @@ export const check = async () => {
       }
 
       if (status === 401 || status === 403) {
-        PersistentStorage.remove(LOCAL_STORAGE_KEYS.AUTH_TOKEN)
+        // Токен недействителен, возвращаем null
         return null
       }
 

@@ -7,15 +7,17 @@ export default (req, res, next) => {
   }
 
   try {
-    const auth = req.headers.authorization || ''
-    const token = auth.startsWith('Bearer ') ? auth.split(' ')[1] : ''
+    // Чтение токена из cookie или заголовка Authorization
+    const token = req.cookies?.token || req.headers.authorization?.split(' ')[1]
+
     if (!token) {
       return res.status(401).json({ message: USER_NOT_AUTHORIZED })
     }
+
     const decoded = jwt.verify(token, process.env.SECRET_KEY)
     req.user = decoded
     next()
-  } catch {
+  } catch (_error) {
     res.status(401).json({ message: USER_NOT_AUTHORIZED })
   }
 }

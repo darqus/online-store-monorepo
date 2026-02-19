@@ -37,15 +37,6 @@ export const API_ENDPOINTS = {
 }
 
 /**
- * Ключи для локального хранилища браузера
- * @readonly
- * @enum {string}
- */
-export const LOCAL_STORAGE_KEYS = {
-  AUTH_TOKEN: 'auth_token',
-}
-
-/**
  * Маршруты приложения
  * @readonly
  * @enum {object}

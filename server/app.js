@@ -4,6 +4,7 @@ import helmet from 'helmet'
 import fileUpload from 'express-fileupload'
 import rateLimit from 'express-rate-limit'
 import morgan from 'morgan'
+import cookieParser from 'cookie-parser'
 import fs from 'fs'
 import router from './routes/index.js'
 import errorHandler from './middleware/ErrorHandlingMiddleware.js'
@@ -20,6 +21,7 @@ export function createApp() {
   if (config.nodeEnv !== 'test') {
     app.use(morgan('dev'))
   }
+  app.use(cookieParser())
   app.use(
     cors({
       origin: (origin, callback) => {
