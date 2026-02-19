@@ -14,6 +14,7 @@ import { showError } from '../utils/notifications'
 export const Shop = observer(() => {
   const { device, basket, user } = useContext(Context)
 
+  // Загрузка типов и брендов при монтировании
   useEffect(() => {
     const loadInitialData = async () => {
       try {
@@ -38,23 +39,22 @@ export const Shop = observer(() => {
         showError('Ошибка при загрузке корзины', error)
       })
     }
-  }, [user.isAuth, basket])
+  }, [user.isAuth, basket?.isLoaded, basket?.isLoading, basket?.loadBasket])
 
-  // MobX observer будет автоматически отслеживать изменения
+  // Загрузка устройств при изменении фильтров и пагинации
   useEffect(() => {
-    const { selectedType, selectedBrand, pagination } = device
-    const { currentPage, limit } = pagination
+    const typeId = device.selectedType?.id
+    const brandId = device.selectedBrand?.id
+    const { currentPage, limit } = device.pagination
 
     device
-      .fetchDevices(selectedType?.id, selectedBrand?.id, currentPage, limit)
+      .fetchDevices(typeId, brandId, currentPage, limit)
       .catch((error) => showError('Ошибка при загрузке товаров', error))
   }, [
-    device,
     device.selectedType?.id,
     device.selectedBrand?.id,
     device.pagination.currentPage,
     device.pagination.limit,
-    device.fetchDevices,
   ])
 
   return (

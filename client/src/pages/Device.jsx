@@ -21,6 +21,7 @@ export const Device = observer(() => {
   const navigate = useNavigate()
   const { basket, user } = useContext(Context)
 
+  // Загрузка данных устройства при изменении id
   useEffect(() => {
     setLoading(true)
     fetchOneDevice(id)
@@ -39,7 +40,7 @@ export const Device = observer(() => {
         showError('Ошибка при загрузке корзины', error)
       })
     }
-  }, [user.isAuth, basket])
+  }, [user.isAuth, basket?.isLoaded, basket?.isLoading, basket?.loadBasket])
 
   if (loading) return <div>Loading...</div>
 

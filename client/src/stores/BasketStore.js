@@ -147,8 +147,7 @@ class BasketStore {
           )
         }
 
-        // Make sure the array is reactive
-        this.basket = [...this.basket]
+        // MobX автоматически отслеживает изменения массива
       })
     } catch (error) {
       showError(
@@ -183,7 +182,12 @@ class BasketStore {
         (item) => item.deviceId === deviceId
       )
       runInAction(() => {
-        this.basket = this.basket.filter((item) => item.deviceId !== deviceId)
+        const itemIndex = this.basket.findIndex(
+          (item) => item.deviceId === deviceId
+        )
+        if (itemIndex !== -1) {
+          this.basket.splice(itemIndex, 1)
+        }
         showInfo(
           `Товар "${itemToRemove?.device?.name || 'Товар'}" удален из корзины`
         )
@@ -238,7 +242,6 @@ class BasketStore {
             quantity: response.data.quantity || quantity || 1,
           }
           this.basket[itemIndex] = updatedItem
-          this.basket = [...this.basket] // Ensure reactivity
           showSuccess(
             `Количество товара "${updatedItem.device?.name || 'Товар'}" изменено на ${quantity}`
           )
