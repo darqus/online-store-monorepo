@@ -1,7 +1,13 @@
 import useSWR from 'swr'
 
+// Базовый URL API из переменных окружения
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+
+// Относительные пути уже начинаются с /api, поэтому используем их напрямую
 const fetcher = async (url) => {
-  const response = await fetch(url)
+  // Если URL начинается с http, используем как есть, иначе добавляем базовый URL
+  const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url.startsWith('/') ? url : '/' + url}`
+  const response = await fetch(fullUrl)
   if (!response.ok) {
     const error = new Error('Network response was not ok')
     error.status = response.status
@@ -29,7 +35,7 @@ export function useDevices(typeId, brandId, page = 1, limit = 5) {
   })
 
   const { data, error, isLoading, mutate } = useSWR(
-    `/api/device?${params}`,
+    `/device?${params}`,
     fetcher,
     {
       revalidateOnFocus: false,
@@ -54,7 +60,7 @@ export function useDevices(typeId, brandId, page = 1, limit = 5) {
  */
 export function useDevice(id) {
   const { data, error, isLoading, mutate } = useSWR(
-    id ? `/api/device/${id}` : null,
+    id ? `/device/${id}` : null,
     fetcher,
     {
       revalidateOnFocus: false,
@@ -76,7 +82,7 @@ export function useDevice(id) {
  */
 export function useTypes() {
   const { data, error, isLoading, mutate } = useSWR(
-    '/api/type',
+    '/type',
     fetcher,
     {
       revalidateOnFocus: false,
@@ -98,7 +104,7 @@ export function useTypes() {
  */
 export function useBrands() {
   const { data, error, isLoading, mutate } = useSWR(
-    '/api/brand',
+    '/brand',
     fetcher,
     {
       revalidateOnFocus: false,

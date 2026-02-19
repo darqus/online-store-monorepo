@@ -1,6 +1,7 @@
 import { Device, DeviceInfo, Rating } from '../models/models.js'
 import { db } from '../db.js'
 import { storage } from './storage.js'
+import { cachedGet } from '../utils/cache.js'
 
 export const createDevice = async ({ name, price, brandId, typeId, img, info }) => {
   // Wrap device and its info creation in a single transaction.
@@ -59,4 +60,16 @@ export const toViewDevice = async (device) => {
 export const toViewDevices = async ({ count, rows }) => {
   const mapped = await Promise.all(rows.map((d) => toViewDevice(d)))
   return { count, rows: mapped }
+}
+
+/**
+ * Получить список устройств с кэшированием
+ * @param {Object} params - Параметры запроса
+ * @returns {Promise<Object>} Результат с кэшем или без
+ */
+export const listDevicesCached = async ({ where, limit, offset, cacheKey }) => {
+  return cachedGet(cacheKey, async () => {
+    const result = await Device.findAndCountAll({ where, limit, offset })
+    return toViewDevices(result)
+  })
 }

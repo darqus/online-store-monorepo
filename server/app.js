@@ -48,6 +48,46 @@ export function createApp() {
     })
   )
 
+  // Cache-Control middleware for API endpoints
+  // Public cacheable endpoints (GET requests for static data)
+  app.use('/api/type', (req, res, next) => {
+    if (req.method === 'GET') {
+      res.set('Cache-Control', 'public, max-age=300') // 5 минут
+    }
+    next()
+  })
+
+  app.use('/api/brand', (req, res, next) => {
+    if (req.method === 'GET') {
+      res.set('Cache-Control', 'public, max-age=300') // 5 минут
+    }
+    next()
+  })
+
+  app.use('/api/device', (req, res, next) => {
+    if (req.method === 'GET') {
+      // Для GET запросов с параметрами (список устройств)
+      if (Object.keys(req.query).length > 0) {
+        res.set('Cache-Control', 'public, max-age=180') // 3 минуты
+      } else if (req.params.id) {
+        // Для конкретного устройства
+        res.set('Cache-Control', 'public, max-age=300') // 5 минут
+      }
+    }
+    next()
+  })
+
+  // Private endpoints (require auth) - no caching
+  app.use('/api/user', (req, res, next) => {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private')
+    next()
+  })
+
+  app.use('/api/basket', (req, res, next) => {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private')
+    next()
+  })
+
   // Static and file uploads
   fs.mkdirSync(STATIC_IMAGES_PATH, { recursive: true })
   app.use('/static', express.static(STATIC_DIR))
