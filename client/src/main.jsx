@@ -1,3 +1,4 @@
+import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { App } from './App.jsx'
 import NotificationProvider from './components/NotificationProvider'
@@ -7,9 +8,11 @@ import { deviceStore as device } from './stores/DeviceStore.js'
 import { userStore as user } from './stores/UserStore.js'
 
 createRoot(document.getElementById('root')).render(
-  <NotificationProvider>
-    <Context.Provider value={{ user, device, basket }}>
-      <App />
-    </Context.Provider>
-  </NotificationProvider>
+  <StrictMode>
+    <NotificationProvider>
+      <Context.Provider value={{ user, device, basket }}>
+        <App />
+      </Context.Provider>
+    </NotificationProvider>
+  </StrictMode>
 )
